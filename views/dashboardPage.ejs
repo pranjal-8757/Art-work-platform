@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art-page | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-900 ">
+    <!-- Header -->
+    <header class="bg-zinc-800 border-b border-zinc-700 px-6 py-4">
+        <div class=" mx-auto flex items-center justify-between">
+            <h1 class="text-2xl font-semibold text-white">Art-page</h1>
+                <a class="bg-red-500 rounded-md mt-2 mb-2 inline-block px-3 py-2 text-sm " href="/logout">Logout</a>
+        </div>
+    </header>
+
+    <div class="p-6">
+        <!-- Welcome Section -->
+        <div class="mb-4">
+            <h3 class="text-3xl text-white ml-5 mb-2"><span class="font-light">Hello</span>, <%= user.name %></h2>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-4 w-full">
+            <!-- Profile Section -->
+            <div class="lg:col-span-1 ">
+                
+                    <div class="ml-5 mb-6 flex">
+                        <div>
+                            <p class="text-white mr-2 font-medium"><%= user.name %> | </p>
+                        </div>
+                        <div>
+                            <p class="text-white ml-1 mr-1 font-medium"><%= user.email %> | </p>
+                        </div>
+                        <div>
+                            <p class="text-white ml-2 mr-1 font-medium"><%= user.age %></p>
+                        </div>
+                    </div>
+
+            <!-- Main Content -->
+           <div class="flex flex-col md:flex-row md:gap-4 gap-4 flex-wrap">
+    <!-- Paintings Card -->
+ <div class="flex-1">
+  <a href="/profile" class="block bg-zinc-700 rounded-lg p-6 hover:bg-zinc-600 transition-colors duration-200 cursor-pointer group h-full">
+      <div class="flex items-center mb-3">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+              <!-- Icon -->
+          </div>
+          <h4 class="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">Water Colors</h4>
+      </div>
+      <p class="text-zinc-300 text-sm">All artworks under traditional and digital painting styles.</p>
+  </a>
+</div>   
+
+    <!-- Abstract Card -->
+ <div class="flex-1">
+  <a href="/profile" class="block bg-zinc-700 rounded-lg p-6 hover:bg-zinc-600 transition-colors duration-200 cursor-pointer group h-full">
+      <div class="flex items-center mb-3">
+          <div class="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center mr-3">
+              <!-- Icon -->
+          </div>
+          <h4 class="text-lg font-semibold text-white group-hover:text-purple-400 transition-colors">Abstract</h4>
+      </div>
+      <p class="text-zinc-300 text-sm">Collection of abstract and expressive visual ideas.</p>
+  </a>
+</div>
+
+
+    <!-- Pencil Art Card -->
+ <div class="flex-1">
+  <a href="/profile" class="block bg-zinc-700 rounded-lg p-6 hover:bg-zinc-600 transition-colors duration-200 cursor-pointer group h-full">
+      <div class="flex items-center mb-3">
+          <div class="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center mr-3">
+              <!-- Icon -->
+          </div>
+          <h4 class="text-lg font-semibold text-white group-hover:text-green-400 transition-colors">Pencil Art</h4>
+      </div>
+      <p class="text-zinc-300 text-sm">Sketches and drawings created using pencil and charcoal.</p>
+  </a>
+</div>
+
+Sketches and drawings created using pencil and charcoal.
+
+    <script>
+        // Add some interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers for category cards
+            const cards = document.querySelectorAll('.cursor-pointer');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('h4').textContent;
+                    console.log(`Clicked on ${title} category`);
+                    // You can add navigation logic here
+                });
+            });
+
+            // Logout functionality
+            const logoutBtn = document.querySelector('button');
+            logoutBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    // Add logout logic here
+                    console.log('Logging out...');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <h1 class="text-2xl mb-4 text-white">Explore Posts</h1>
+<% posts.forEach(post => { %>
+  <div class="p-4 border-b border-zinc-700 text-white">
+    <div class="flex items-center gap-2">
+      <img src="/images/upload/<%= post.user.profilepic %>" class="w-8 h-8 rounded-full object-cover">
+      <h4>@<%= post.user.username %></h4>
+    </div>
+    <p class="mt-2"><%= post.content %></p>
+    <% if (post.image) { %>
+      <img class="w-64 mt-2 rounded-md" src="/images/upload/<%= post.image %>">
+    <% } %>
+    <div class="text-sm mt-2">
+      <span><%= post.likes.length %> likes</span>
+      <a class="ml-2 text-blue-500" href="/like/<%= post._id %>">
+        <%= post.likes.includes(user.userid) ? "Unlike" : "Like" %>
+      </a>
+      <a class="ml-4 text-zinc-400" href="/profile/<%= post.user._id %>">View Profile</a>
+    </div>
+  </div>
+<% }) %>
+
+</body>
+</html>
