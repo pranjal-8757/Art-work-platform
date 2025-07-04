@@ -13,5 +13,9 @@
             <input type="file" name="image">
             <input class="px-3 py-2 outline-none bg-transparent border-2 border-zinc-800" type="submit" value="Upload File">
         </form>
+        <form autocomplete="off" action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="image" required />
+            <input class="px-3 py-2 outline-none bg-transparent border-2 border-zinc-800" type="submit" value="Upload Profile Picture" />
+        </form>
 </body>
 </html>
