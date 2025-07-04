@@ -62,7 +62,7 @@
             <div class="posts">
                 <h3 class="text-xl font-semibold mb-6 text-gray-300"><%= loggedInUser._id === user._id ? "Your Posts." : user.name + "'s Posts" %></h3>
 
-                <div class="postcontainer grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="postcontainer grid grid-cols-1 md:grid-cols-2 gap-6">
                     <% user.posts.slice().reverse().forEach(function(post) { %>
                     <div class="post-card bg-zinc-800 rounded-lg p-5 border border-zinc-700">
                         <div class="mb-3">
