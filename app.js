@@ -16,7 +16,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const path = require("path");
-const upload = require("./config/multerconfig");
+const upload = require("./config/multerconfig"); // Now using Cloudinary storage
 
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -32,10 +32,10 @@ app.get('/profile/upload', (req, res) => {
     res.render("profileupload");
 }); 
 
-app.post('/upload',isLoggedIn , upload.single("image") , async (req, res) => {
-    let user = await userModel.findOne({email: req.user.email});
-    user.profilepic = req.file.filename;
-    await user.save()
+app.post('/upload', isLoggedIn, upload.single("image"), async (req, res) => {
+    let user = await userModel.findOne({ email: req.user.email });
+    user.profilepic = req.file.path; // ✅ Cloudinary URL
+    await user.save();
     res.redirect("/profile");
 }); 
 
@@ -44,22 +44,21 @@ app.get('/login', (req, res) => {
 }); 
 
 app.get('/explore', isLoggedIn, async (req, res) => {
-  const posts = await postModel.find().populate("user").sort({ _id: -1 }); // latest first
+  const posts = await postModel.find().populate("user").sort({ _id: -1 });
   res.render("explore", { posts, user: req.user });
 });
 
 app.get('/profile', isLoggedIn, async (req, res) => {
-    let user = await userModel.findOne({email: req.user.email}).populate("posts");
+    let user = await userModel.findOne({ email: req.user.email }).populate("posts");
     res.render("profile", { user, loggedInUser: user }); 
 });
 
 app.get('/like/:id', isLoggedIn, async (req, res) => {
-    let post = await postModel.findOne({_id: req.params.id}).populate("user");
+    let post = await postModel.findOne({ _id: req.params.id }).populate("user");
 
-    if(post.likes.indexOf(req.user.userid) === -1){
+    if (post.likes.indexOf(req.user.userid) === -1) {
         post.likes.push(req.user.userid);
-    }
-    else{
+    } else {
         post.likes.splice(post.likes.indexOf(req.user.userid), 1);
     }
     
@@ -77,18 +76,16 @@ app.get('/edit/:id', isLoggedIn, async (req, res) => {
     res.render("edit", { post });
 });
 
-
-app.get('/delete/:id',isLoggedIn, async (req, res) => {
-    let post = await postModel.findOneAndDelete({_id: req.params.id});
+app.get('/delete/:id', isLoggedIn, async (req, res) => {
+    await postModel.findOneAndDelete({ _id: req.params.id });
     res.redirect("/profile");
-})
+});
 
 app.get('/profile/:id', isLoggedIn, async (req, res) => {
   const user = await userModel.findById(req.params.id).populate("posts");
-  const loggedInUser = await userModel.findById(req.user.userid); // fetch full user details
+  const loggedInUser = await userModel.findById(req.user.userid);
   res.render("profile", { user, loggedInUser });
 });
-
 
 app.get("/test-users", async (req, res) => {
   let users = await userModel.find();
@@ -96,13 +93,13 @@ app.get("/test-users", async (req, res) => {
 });
 
 app.post('/post', isLoggedIn, upload.single("image"), async (req, res) => {
-    let user = await userModel.findOne({email: req.user.email});
+    let user = await userModel.findOne({ email: req.user.email });
     let { content } = req.body;
 
     let post = await postModel.create({
         user: user._id,
         content,
-        image: req.file ? req.file.filename : null 
+        image: req.file ? req.file.path : null // ✅ Cloudinary URL
     });
 
     user.posts.push(post._id);  
@@ -116,8 +113,9 @@ app.post("/update/:id", isLoggedIn, upload.single("image"), async (req, res) => 
     post.content = req.body.content;
 
     if (req.file) {
-        post.image = req.file.filename;
+        post.image = req.file.path; // ✅ Cloudinary URL
     }
+
     await post.save();
     res.redirect("/profile");
 });
@@ -158,7 +156,6 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        console.log("Login input:", req.body);
         const user = await userModel.findOne({ email });
 
         if (!user) {
@@ -187,14 +184,9 @@ app.get('/logout', (req, res) => {
     res.redirect("/login");
 });
 
-app.get("/test-users", async (req, res) => {
-  let users = await userModel.find();
-  res.send(users);
-});
-
-function isLoggedIn(req, res, next){
-    if(req.cookies.token === "") res.send("You must be logged in");
-    else{
+function isLoggedIn(req, res, next) {
+    if (req.cookies.token === "") res.send("You must be logged in");
+    else {
         let data = jwt.verify(req.cookies.token, "shhhh");
         req.user = data;
         next(); 
