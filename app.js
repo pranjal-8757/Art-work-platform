@@ -1,5 +1,14 @@
+require("dotenv").config(); // Load env vars
+
 const express = require("express");
+const mongoose = require("mongoose");
+
 const app = express();
+
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log("Connection error:", err));
+
 const userModel = require("./models/user");
 const postModel = require("./models/post");
 const cookieParser = require("cookie-parser");
